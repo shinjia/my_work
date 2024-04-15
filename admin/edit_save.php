@@ -6,7 +6,7 @@ include '../common/define.php';
 include '../common/utility.php';
 
 $ss_usertype = $_SESSION[DEF_SESSION_USERTYPE] ?? '';
-$ss_workcode = $_SESSION[DEF_SESSION_workcode] ?? '';
+$ss_usercode = $_SESSION[DEF_SESSION_USERCODE] ?? '';
 
 if($ss_usertype!=DEF_LOGIN_ADMIN) {
     header('Location: login_error.php');
@@ -30,8 +30,11 @@ $picture  = $_POST['picture']  ?? '';
 $tags     = $_POST['tags']     ?? '';
 $category = $_POST['category'] ?? '';
 $score    = $_POST['score']    ?? '';
-$is_oepn  = $_POST['is_open']  ?? '';
+$is_open  = $_POST['is_open']  ?? '';
 $remark   = $_POST['remark']   ?? '';
+
+// 注意：處理 is_open 的值
+$is_open = ($is_open=='Y') ? 1 : 0;
 
 // 連接資料庫
 $pdo = db_open();
@@ -47,7 +50,7 @@ $sqlstr = "UPDATE work SET
    tags    =:tags,
    category=:category,
    score   =:score,
-   is_open =:is_oepn,
+   is_open =:is_open,
    remark  =:remark 
 WHERE uid=:uid ";
 
@@ -61,7 +64,7 @@ $sth->bindParam(':picture' , $picture , PDO::PARAM_STR);
 $sth->bindParam(':tags'    , $tags    , PDO::PARAM_STR);
 $sth->bindParam(':category', $category, PDO::PARAM_STR);
 $sth->bindParam(':score'   , $score   , PDO::PARAM_INT);
-$sth->bindParam(':is_oepn' , $is_oepn , PDO::PARAM_INT);
+$sth->bindParam(':is_open' , $is_open , PDO::PARAM_INT);
 $sth->bindParam(':remark'  , $remark  , PDO::PARAM_STR);
 $sth->bindParam(':uid'     , $uid     , PDO::PARAM_INT);
 

@@ -6,7 +6,7 @@ include '../common/define.php';
 include '../common/utility.php';
 
 $ss_usertype = $_SESSION[DEF_SESSION_USERTYPE] ?? '';
-$ss_workcode = $_SESSION[DEF_SESSION_workcode] ?? '';
+$ss_usercode = $_SESSION[DEF_SESSION_USERCODE] ?? '';
 
 if($ss_usertype!=DEF_LOGIN_ADMIN) {
     header('Location: login_error.php');

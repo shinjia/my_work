@@ -6,7 +6,7 @@ include '../common/define.php';
 include '../common/utility.php';
 
 $ss_usertype = $_SESSION[DEF_SESSION_USERTYPE] ?? '';
-$ss_workcode = $_SESSION[DEF_SESSION_workcode] ?? '';
+$ss_usercode = $_SESSION[DEF_SESSION_USERCODE] ?? '';
 
 if($ss_usertype!=DEF_LOGIN_ADMIN) {
     header('Location: login_error.php');
@@ -51,9 +51,31 @@ try {
         $tags     = html_encode($row['tags']);
         $category = html_encode($row['category']);
         $score    = html_encode($row['score']);
-        $is_open  = html_encode($row['is_open']);
+        $is_open  = intval($row['is_open']);  // is_open 欄位要處理
         $remark   = html_encode($row['remark']);
         
+
+        // part2: 製作表單元件
+        // 欄位1 (category)
+        $str_category = '<select name="category">';
+        foreach($a_category as $key=>$value) {
+            $tmp = ($key==$category) ? 'selected="selected"' : '';
+            $str_category .= '<option value="' . $key . '" ' . $tmp . '>' . $value . '</option>';
+        }
+        $str_category .= '</select>';
+
+        // 欄位2 (score)
+        $str_score = '';
+        foreach($a_score as $key=>$value) {
+            $tmp = ($key==$score) ? 'checked="checked"' : '';
+            $str_score .= '<input type="radio" name="score" value="' . $key . '" ' . $tmp . '>' . $value;
+            $str_score .= '<br>';
+        }
+
+        // 欄位3 (is_open)
+        $tmp = ($is_open==0) ? '' : 'checked="checked"';
+        $str_is_open = '<input type="checkbox" name="is_open" value="Y" ' . $tmp . '> 是否設定為發佈';
+
         // 網頁連結
         $lnk_list = 'list_page.php?uid=' . $uid . '&page=' . $page . '&nump=' . $nump;
 
@@ -68,9 +90,9 @@ try {
             <tr><th>日期</th><td><input type="text" name="pub_date" value="{$pub_date}"></td></tr>
             <tr><th>照片</th><td><input type="text" name="picture"  value="{$picture}"></td></tr>
             <tr><th>標籤</th><td><input type="text" name="tags"     value="{$tags}"></td></tr>
-            <tr><th>分類</th><td><input type="text" name="category" value="{$category}"></td></tr>
-            <tr><th>評分</th><td><input type="text" name="score"    value="{$score}"></td></tr>
-            <tr><th>發佈</th><td><input type="text" name="is_open"  value="{$is_open}"></td></tr>
+            <tr><th>分類</th><td>({$category}) {$str_category}</td></tr>
+            <tr><th>評分</th><td>({$score}) {$str_score}</td></tr>
+            <tr><th>發佈</th><td>({$is_open}) {$str_is_open}</td></tr>
             <tr><th>備註</th><td><input type="text" name="remark"   value="{$remark}"></td></tr>
         </table>
         <p>

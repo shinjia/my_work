@@ -30,6 +30,7 @@ $pdo = db_open();
 
 // SQL 語法：取得分頁所需之資訊 (總筆數、總頁數、擷取記錄之起始位置)
 $sqlstr = "SELECT count(*) as total_rec FROM work ";
+$sqlstr .= " WHERE is_open=1 ";
 $sth = $pdo->prepare($sqlstr);
 try {
     $sth->execute();
@@ -49,6 +50,7 @@ if($page>$total_page && $total_page>0) {
 
 // SQL 語法：分頁資訊
 $sqlstr = "SELECT * FROM work ";
+$sqlstr .= " WHERE is_open=1 ";
 $sqlstr .= " LIMIT " . (($page-1)*$nump) . "," . $nump;
 
 // 執行 SQL
