@@ -91,6 +91,13 @@ try {
             $str_highlight = 'class="hightlight table-warning"';
         }
 
+        // 主要圖片
+        $file_img = PATH_UPLOAD_ROOT . $workcode . '/' . $picture;
+        if(!file_exists($file_img)) {
+            $file_img = PATH_UPLOAD_ROOT . '00_default.jpg';
+        }
+        $str_picture = '<img src="' . $file_img . '" style="max-width:100px; max-height:100px;">';
+
         // 超連結
         $lnk_display = 'display.php?uid=' . $uid . '&page=' . $page . '&nump=' . $nump;
         $lnk_edit = 'edit.php?uid=' . $uid . '&page=' . $page . '&nump=' . $nump;
@@ -104,7 +111,7 @@ try {
             <td>{$intro}</td>
             <td>{$descr}</td>
             <td>{$pub_date}</td>
-            <td>{$picture}</td>
+            <td>{$str_picture}</td>
             <td>{$tags}</td>
             <td>{$category}</td>
             <td>{$score}</td>

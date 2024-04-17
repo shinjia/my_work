@@ -62,6 +62,13 @@ try {
         $str_score = $a_score[$score] ?? '(查無對應的值)';
         $str_is_open = $a_is_open[$is_open] ?? '(查無對應的值)';
 
+        // 主要圖片
+        $file_img = PATH_UPLOAD_ROOT . $workcode . '/' . $picture;
+        if(!file_exists($file_img)) {
+            $file_img = PATH_UPLOAD_ROOT . $workcode . '/00default.jpg';
+        }
+        // <img src="{$file_img}" style="max-width:100px; max-height:100px;">
+
         $data = <<< HEREDOC
         <table class="table">
             <tr><th>代碼</th><td>{$workcode}</td></tr>
@@ -69,7 +76,11 @@ try {
             <tr><th>簡介</th><td>{$intro}</td></tr>
             <tr><th>說明</th><td>{$descr}</td></tr>
             <tr><th>日期</th><td>{$pub_date}</td></tr>
-            <tr><th>圖片</th><td>{$picture}</td></tr>
+            <tr><th>圖片</th>
+                <td>
+                    {$picture} <img src="{$file_img}" style="max-width:100px; max-height:100px;">
+                </td>
+            </tr>
             <tr><th>標籤</th><td>{$tags}</td></tr>
             <tr><th>分類</th><td>({$category}) {$str_category}</td></tr>
             <tr><th>評分</th><td>({$score}) {$str_score}</td></tr>

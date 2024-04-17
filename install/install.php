@@ -6,7 +6,7 @@ include '../common/config.php';
 define('HOME'        ,1); // 首頁
 // define('CREATE_DB'   ,1); // 新增資料庫
 define('CREATE_TABLE',1); // 新增資料表
-// define('DROP_TABLE'  ,1); // 刪除資料表
+define('DROP_TABLE'  ,1); // 刪除資料表
 define('VIEW_DEFINE' ,1); // 查看定義
 define('ADD_DATA'    ,1); // 新增預設資料
 // define('ADD_MANY'    ,1); // 新增多筆
@@ -42,8 +42,11 @@ CREATE TABLE work (
 
 // 如要預先新增記錄，定義於此
 $a_record[] = "INSERT INTO work(workcode, workname, intro, descr, pub_date, picture, tags, category, score, is_open, remark) VALUES
- ('A001', 'AI生成圖-風景', '利用AI生成圖片，風景', '說明文字略', '2024-04-10','', 'AI生成圖,虛擬', 'AI生成圖',3,0,''),
- ('A002', 'AI生成圖-繪本', '利用AI生成圖片，繪本風格，', '說明文字略', '2024-04-11','', 'AI生成圖,虛擬,繪本', 'AI生成圖',3,0,'');";
+ ('A001', 'AI生成圖-風景', '利用AI生成圖片，風景', '說明文字略', '2024-04-10','cover.jpg', '虛擬', 'AIGEN',3,0,''),
+ ('A002', 'AI生成圖-繪本', '利用AI生成圖片，繪本風格，', '說明文字略', '2024-04-11','cover.jpg', '虛擬,繪本', 'AIGEN',3,0,''),
+ ('A003', '雷切創意', '利用A雷射切割的作品，', '說明文字略', '2024-04-17','cover.jpg', '節日,禮物,花', 'LASER',5,0,''),
+ ('A004', 'AI生成圖-繪本', '利用AI生成圖片，花', '說明文字略', '2024-04-17','cover.jpg', '虛擬,花', 'AIGEN',2,0,'');
+ ";
  
 
 

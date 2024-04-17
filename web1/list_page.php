@@ -86,7 +86,7 @@ try {
         if(!file_exists($file_img)) {
             $file_img = PATH_UPLOAD_ROOT . $workcode . '/00default.jpg';
         }
-        $str_picture = '<img src="' . $file_img . '" style="max-width:100px; max-height:100px;">';
+        $str_picture = '<img src="' . $file_img . '" style="width:100%; height:100%;">';
 
         // tags 欄位增加超連結
         $a_tags = explode(',', $tags);
@@ -104,23 +104,19 @@ try {
         $lnk_display = 'display.php?uid=' . $uid . '&page=' . $page . '&nump=' . $nump;
 
         $data .= <<< HEREDOC
-        <tr {$str_highlight}>
-            <th class="table-secondary text-center">{$cnt}</th>
-            <td>{$workcode}</td>
-            <td>{$workname}</td>
-            <td>{$intro}</td>
-            <td>{$descr}</td>
-            <td>{$pub_date}</td>
-            <td>{$str_picture}</td>
-            <td>{$str_tags}</td>
-            <td>{$str_category}</td>
-            <td>{$score}</td>
-            <td>{$is_open}</td>
-            <td>{$remark}</td>
-            <td class="table-secondary" style="width: 1%; white-space:nowrap;">
-                <a href="{$lnk_display}" class="btn btn-info btn-sm">詳細</a>
-            </td>
-        </tr>
+        <div style="display:flex; justify-content: center; align-items: center;">
+            <div style="display:inline-block; border: 1px solid gray; padding: 0px 0px 10px 0px; margin:5px; 10px; border-radius:4px; overflow:hidden;">
+                <div style="width:300px; height:300px; ">
+                    <a href="{$lnk_display}">{$str_picture}</a>
+                </div>
+                <div>
+                    {$workname}<br/>
+                    分類：{$str_tags}<br>
+                    標籤：{$str_category}<br>
+                    ✰ ({$score})
+                </div>
+            </div>
+        </div>
 HEREDOC;
     }
 
@@ -132,24 +128,9 @@ HEREDOC;
     <nav>
         {$ihc_pagination}
     </nav>
-    <table class="table table-hover">
-        <tr class="table-secondary">
-            <th class="text-center">順序</th>
-            <th>代碼</th>
-            <th>名稱</th>
-            <th>簡介</th>
-            <th>內容</th>
-            <th>日期</th>
-            <th>照片</th>
-            <th>標籤</th>
-            <th>分類</th>
-            <th>評分</th>
-            <th>發佈</th>
-            <th>備註</th>
-            <th class="text-center">查看</th>
-        </tr>
+    <div>
     {$data}
-    </table>
+    </div>
 HEREDOC;
 
     // 找不到資料時
@@ -163,7 +144,6 @@ db_close();
 
 
 $html = <<< HEREDOC
-<h2>資料列表 (分頁)</h2>
 {$ihc_content}
 {$ihc_error}
 HEREDOC;

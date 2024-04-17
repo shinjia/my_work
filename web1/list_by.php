@@ -7,6 +7,27 @@ include '../common/utility.php';
 // 頁碼參數
 $page = $_GET['page'] ??  1;   // 目前的頁碼
 $nump = $_GET['nump'] ?? 10;   // 每頁的筆數
+$type = $_GET['type'] ?? 'XX';
+$key = $_GET['key'] ?? '';
+
+// 決定查詢的特別條件
+$sql_where = '';
+switch ($type) {
+    case 'TAGS':
+        $sql_where = " AND tags LIKE :keyword ";  // 依條件修改
+        $keyword = '%' . $key . '%';  // 注意
+        break;
+
+    case 'CATEGORY':
+        $sql_where = " AND category=:keyword ";  // 依條件修改
+        $keyword = $key;  // 注意
+        break;
+
+    default:
+        $sql_where = " AND false ";  // 依條件修改
+        break;
+}
+
 
 // 增加傳入 uid，把該筆記錄高亮標示
 $uid_highlight = $_GET['uid'] ?? '';
@@ -31,7 +52,10 @@ $pdo = db_open();
 // SQL 語法：取得分頁所需之資訊 (總筆數、總頁數、擷取記錄之起始位置)
 $sqlstr = "SELECT count(*) as total_rec FROM work ";
 $sqlstr .= " WHERE is_open=1 ";
+$sqlstr .= $sql_where;
+
 $sth = $pdo->prepare($sqlstr);
+$sth->bindParam(':keyword', $keyword, PDO::PARAM_STR);
 try {
     $sth->execute();
     if($row = $sth->fetch(PDO::FETCH_ASSOC)) {
@@ -51,11 +75,16 @@ if($page>$total_page && $total_page>0) {
 // SQL 語法：分頁資訊
 $sqlstr = "SELECT * FROM work ";
 $sqlstr .= " WHERE is_open=1 ";
+$sqlstr .= $sql_where;
 $sqlstr .= " LIMIT " . (($page-1)*$nump) . "," . $nump;
 
+$sth = $pdo->prepare($sqlstr);
+$sth->bindParam(':keyword', $keyword, PDO::PARAM_STR);
 // 執行 SQL
 try { 
-    $sth = $pdo->query($sqlstr);
+    // $sth = $pdo->query($sqlstr);
+    $sth->execute();
+    $sth->bindParam(':keyword', $keyword, PDO::PARAM_STR);
 
     $cnt = (($page-1)*$nump);  // 注意分頁的起始順序
     $data = '';
@@ -88,20 +117,10 @@ try {
         }
         $str_picture = '<img src="' . $file_img . '" style="max-width:100px; max-height:100px;">';
 
-        // tags 欄位增加超連結
-        $a_tags = explode(',', $tags);
-        array_map('trim', $a_tags);
-        $str_tags = '';
-        foreach($a_tags as $value) {
-            $str_tags .= '[<a href="list_by.php?type=TAGS&key=' . $value . '">' . $value . '</a>] ';
-        }
-        
-        // category 欄位增加超連結
-        $str_category = '<a href="list_by.php?type=CATEGORY&key=' . $category . '">' . $a_category[$category] . '</a> ';
-
-
         // 超連結
         $lnk_display = 'display.php?uid=' . $uid . '&page=' . $page . '&nump=' . $nump;
+        $lnk_edit = 'edit.php?uid=' . $uid . '&page=' . $page . '&nump=' . $nump;
+        $lnk_delete = 'delete.php?uid=' . $uid . '&page=' . $page . '&nump=' . $nump;
 
         $data .= <<< HEREDOC
         <tr {$str_highlight}>
@@ -112,8 +131,8 @@ try {
             <td>{$descr}</td>
             <td>{$pub_date}</td>
             <td>{$str_picture}</td>
-            <td>{$str_tags}</td>
-            <td>{$str_category}</td>
+            <td>{$tags}</td>
+            <td>{$category}</td>
             <td>{$score}</td>
             <td>{$is_open}</td>
             <td>{$remark}</td>
