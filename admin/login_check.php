@@ -30,12 +30,12 @@ foreach($a_list as $one) {
 // 權限是否通過
 if($valid) {
     $_SESSION[DEF_SESSION_USERTYPE] = $usertype;
-    $_SESSION[DEF_SESSION_workcode] = $workcode;
+    $_SESSION[DEF_SESSION_USERCODE] = $workcode;
     $msg = $workcode . ' 你好，歡迎光臨！ ';
 }
 else {
     $_SESSION[DEF_SESSION_USERTYPE] = '';
-    $_SESSION[DEF_SESSION_workcode] = '';
+    $_SESSION[DEF_SESSION_USERCODE] = '';
     $msg = '登入錯誤';
 }
 

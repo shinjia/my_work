@@ -2,7 +2,7 @@
 
 // 資料庫連接的重要參數
 define('DB_SERVERIP', 'localhost');
-define('DB_workname', 'root');
+define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
 define('DB_DATABASE', 'class');
 
@@ -24,7 +24,7 @@ define('ERROR_DBSOURCE' , 'DB source error.');  // 無法連接 DB_SOURCE(PDO)
 
 function db_open() {
    try {
-      $pdo = new PDO(DB_SOURCE, DB_workname, DB_PASSWORD);
+      $pdo = new PDO(DB_SOURCE, DB_USERNAME, DB_PASSWORD);
       if(defined('SET_CHARACTER')) $pdo->query(SET_CHARACTER);
       // 指定 PDO 錯誤模式和錯誤處理
       $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
